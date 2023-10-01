@@ -1,22 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { newGeneratorJoksViewModel } from './generator-joks.view-model';
 import { JoksComponent } from './generator-joks.component';
-import { Joke } from '../../App';
 import { restService } from '../../service/rest-service';
+import { useValueWithEffect } from '../../utils/view-model.utils';
+import { newDefaultScheduler } from '@most/scheduler';
+import { useProperty } from '@frp-ts/react';
 
 export const JoksContainer = () => {
-    const [joks, setJoks] = useState<Array<Joke>>([]);
-    const [triger, setTriger] = useState<number>(0);
-
-    const vm = newGeneratorJoksViewModel();
     const service = restService();
-
-    useEffect(() => {
-        service.getNewJoke(setJoks);
-    }, [triger]);
+    const vm = useValueWithEffect(newDefaultScheduler())(
+        () => newGeneratorJoksViewModel(service),
+        []
+    );
 
     return React.createElement(JoksComponent, {
-        setTriger: () => setTriger((x) => x + 1),
-        joks: joks.map(vm.fotmatJoke),
+        setTriger: vm.triger,
+        jokes: useProperty(vm.jokes),
     });
 };
