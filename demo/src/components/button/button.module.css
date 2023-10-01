@@ -1,0 +1,10 @@
+.button {
+    margin: 0 auto;
+    display: block;
+    border: none;
+    padding: 20px;
+    border-radius: 16px;
+    background: linear-gradient(90deg, #da3654 30%, #ff6161);
+    color: aliceblue;
+    font-size: 16px;
+}
